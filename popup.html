@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 320px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #15202b;
+      color: #e7e9ea;
+      padding: 16px;
+    }
+
+    h1 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h1 .icon { font-size: 20px; }
+
+    .subtitle {
+      font-size: 12px;
+      color: #8b98a5;
+      margin-bottom: 16px;
+    }
+
+    .stat {
+      background: #1d2d3e;
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .stat .number {
+      font-size: 28px;
+      font-weight: 800;
+      color: #1d9bf0;
+    }
+
+    .stat .label {
+      font-size: 11px;
+      color: #8b98a5;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Toggle row */
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #2f3336;
+    }
+
+    .toggle-row:last-of-type {
+      border-bottom: none;
+    }
+
+    .toggle-label {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .toggle-desc {
+      font-size: 11px;
+      color: #8b98a5;
+    }
+
+    /* Toggle switch */
+    .switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .switch input { opacity: 0; width: 0; height: 0; }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: #3e4d5b;
+      border-radius: 24px;
+      transition: 0.25s;
+    }
+
+    .slider::before {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      left: 3px;
+      bottom: 3px;
+      background: #e7e9ea;
+      border-radius: 50%;
+      transition: 0.25s;
+    }
+
+    input:checked + .slider {
+      background: #1d9bf0;
+    }
+
+    input:checked + .slider::before {
+      transform: translateX(20px);
+    }
+
+    /* Whitelist */
+    .section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #8b98a5;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 14px;
+      margin-bottom: 8px;
+    }
+
+    .whitelist-input-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .whitelist-input-row input {
+      flex: 1;
+      background: #1d2d3e;
+      border: 1px solid #2f3336;
+      border-radius: 8px;
+      padding: 8px 10px;
+      color: #e7e9ea;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .whitelist-input-row input::placeholder {
+      color: #556677;
+    }
+
+    .whitelist-input-row input:focus {
+      border-color: #1d9bf0;
+    }
+
+    .btn-add {
+      background: #1d9bf0;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-add:hover { background: #1a8cd8; }
+
+    .whitelist-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #1d2d3e;
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 12px;
+    }
+
+    .tag .remove {
+      cursor: pointer;
+      color: #8b98a5;
+      font-weight: 700;
+      margin-left: 2px;
+    }
+
+    .tag .remove:hover { color: #f4212e; }
+
+    .empty-msg {
+      font-size: 12px;
+      color: #556677;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <h1><span class="icon">🚫</span> Blue Check Hider</h1>
+  <p class="subtitle">Hide posts from verified accounts on X</p>
+
+  <div class="stat">
+    <div class="number" id="count">0</div>
+    <div class="label">Posts hidden this session</div>
+  </div>
+
+  <!-- Enabled toggle -->
+  <div class="toggle-row">
+    <div>
+      <div class="toggle-label">Enabled</div>
+      <div class="toggle-desc">Master on/off switch</div>
+    </div>
+    <label class="switch">
+      <input type="checkbox" id="enabled" checked />
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <!-- Hide replies -->
+  <div class="toggle-row">
+    <div>
+      <div class="toggle-label">Hide replies</div>
+      <div class="toggle-desc">Also hide replies from verified accounts</div>
+    </div>
+    <label class="switch">
+      <input type="checkbox" id="hideReplies" checked />
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <!-- Hide retweets -->
+  <div class="toggle-row">
+    <div>
+      <div class="toggle-label">Hide retweets</div>
+      <div class="toggle-desc">Also hide retweets from verified accounts</div>
+    </div>
+    <label class="switch">
+      <input type="checkbox" id="hideRetweets" checked />
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <!-- Whitelist -->
+  <div class="section-title">Whitelisted accounts</div>
+  <div class="whitelist-input-row">
+    <input type="text" id="whitelistInput" placeholder="@username" />
+    <button class="btn-add" id="addBtn">Add</button>
+  </div>
+  <div class="whitelist-tags" id="whitelistTags">
+    <span class="empty-msg" id="emptyMsg">No accounts whitelisted</span>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
